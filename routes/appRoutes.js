@@ -22,6 +22,7 @@ router.post(
       .isEmpty()
       .isLength({ min: 10 })
       .bail(),
+    check("imageUrl", "Please provide a valid image URL").optional().isURL(),
     check("date", "Please enter a name with minimum length of 3")
       .not()
       .isDate()
@@ -30,8 +31,43 @@ router.post(
   AppController.longTermGoals
 );
 
+router.post(
+  "/shorttermgoals",
+  [
+    check("goals", "Please enter a goal with minimum length of 3")
+      .not()
+      .isEmpty()
+      .isLength({ min: 3 })
+      .bail(),
+    check("date", "Please enter a name with minimum length of 3")
+      .not()
+      .isDate()
+      .bail(),
+  ],
+  AppController.shortTermGoals
+);
+
+router.post(
+  "/gratitudelist",
+  [
+    check("list", "Please enter a goal with minimum length of 3")
+      .not()
+      .isEmpty()
+      .isLength({ min: 3 })
+      .bail(),
+  ],
+  AppController.gratitudeList
+);
+
 router.post("/getltgs", AppController.getLtgs);
 router.post("/deleteltgs", AppController.deleteLtgs);
+
+router.post("/getstgs", AppController.getStgs);
+router.post("/completestgs", AppController.completeStgs);
+router.post("/deletestgs", AppController.deleteStgs);
+
+router.post("/getgrat", AppController.getGrat);
+router.post("/deletegrat", AppController.deleteGrat);
 
 // // Protected Routes
 // router.post(
