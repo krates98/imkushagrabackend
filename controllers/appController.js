@@ -169,6 +169,29 @@ class AppController {
 
     res.send(grat);
   };
+
+  //Visualization
+
+  static getVisual = async (req, res) => {
+    const secretKey = process.env.JWT_SECRET_KEY;
+    const { token } = req.body;
+
+    const decoded = jwt.verify(token, secretKey);
+
+    try {
+      const docs = await LTGModel.find(
+        { userid: decoded.userID },
+        { imageurl: 1, _id: 0 }
+      );
+
+      const imageUrlArray = docs.map((doc) => doc.imageurl);
+
+      res.send(imageUrlArray);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    }
+  };
 }
 
 export default AppController;

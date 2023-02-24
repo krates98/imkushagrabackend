@@ -69,6 +69,8 @@ router.post("/deletestgs", AppController.deleteStgs);
 router.post("/getgrat", AppController.getGrat);
 router.post("/deletegrat", AppController.deleteGrat);
 
+router.post("/getvisual", AppController.getVisual);
+
 // // Protected Routes
 // router.post(
 //   "/changepassword",
