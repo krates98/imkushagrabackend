@@ -165,8 +165,6 @@ class AppController {
   static deleteGrat = async (req, res) => {
     const { gratid } = req.body;
 
-    console.log(gratid);
-
     const grat = await GraModel.findOneAndDelete({ _id: gratid });
 
     res.send(grat);
