@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import LTGModel from "../models/LTGoals.js";
 import STGModel from "../models/STGoals.js";
 import GraModel from "../models/Gratitude.js";
+import BudModel from "../models/Budget.js";
+import IncModel from "../models/Income.js";
 
 class AppController {
   //Long Term Goals List
@@ -192,6 +194,104 @@ class AppController {
       console.error(err);
       res.status(500).send("Internal Server Error");
     }
+  };
+
+  //Get Budget
+
+  static budgetList = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    req.body = mongoSanitize(req.body);
+
+    const secretKey = process.env.JWT_SECRET_KEY;
+
+    const { category, amount, date, token } = req.body;
+
+    const decoded = jwt.verify(token, secretKey);
+
+    const doc = new BudModel({
+      category: category,
+      amount: amount,
+      date: date,
+      userid: decoded.userID,
+    });
+
+    await doc.save();
+
+    res.send(doc);
+  };
+
+  static getBud = async (req, res) => {
+    const secretKey = process.env.JWT_SECRET_KEY;
+
+    const { token } = req.body;
+
+    const decoded = jwt.verify(token, secretKey);
+
+    const bud = await BudModel.find({ userid: decoded.userID }).sort({
+      date: 1,
+    });
+
+    res.send({ bud });
+  };
+
+  static deleteBud = async (req, res) => {
+    const { budgetid } = req.body;
+
+    const bud = await BudModel.findOneAndDelete({ _id: budgetid });
+
+    res.send(bud);
+  };
+
+  //Get Income
+
+  static incomeList = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    req.body = mongoSanitize(req.body);
+
+    const secretKey = process.env.JWT_SECRET_KEY;
+
+    const { category, amount, date, token } = req.body;
+
+    const decoded = jwt.verify(token, secretKey);
+
+    const doc = new IncModel({
+      category: category,
+      amount: amount,
+      date: date,
+      userid: decoded.userID,
+    });
+
+    await doc.save();
+
+    res.send(doc);
+  };
+
+  static getInc = async (req, res) => {
+    const secretKey = process.env.JWT_SECRET_KEY;
+
+    const { token } = req.body;
+
+    const decoded = jwt.verify(token, secretKey);
+
+    const inc = await IncModel.find({ userid: decoded.userID }).sort({
+      date: 1,
+    });
+
+    res.send({ inc });
+  };
+
+  static deleteInc = async (req, res) => {
+    const { incomeid } = req.body;
+
+    const inc = await IncModel.findOneAndDelete({ _id: incomeid });
+
+    res.send(inc);
   };
 }
 

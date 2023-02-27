@@ -50,13 +50,43 @@ router.post(
 router.post(
   "/gratitudelist",
   [
-    check("list", "Please enter a goal with minimum length of 3")
+    check("list", "Please enter a gratitude with minimum length of 3")
       .not()
       .isEmpty()
       .isLength({ min: 3 })
       .bail(),
   ],
   AppController.gratitudeList
+);
+
+router.post(
+  "/budgetlist",
+  [
+    check("category", "Please enter a category with minimum length of 3")
+      .not()
+      .isEmpty()
+      .isLength({ min: 3 })
+      .bail(),
+  ],
+  check("amount", "Please enter an amount greater than 0")
+    .isFloat({ min: 1 })
+    .bail(),
+  AppController.budgetList
+);
+
+router.post(
+  "/incomelist",
+  [
+    check("category", "Please enter a category with minimum length of 3")
+      .not()
+      .isEmpty()
+      .isLength({ min: 3 })
+      .bail(),
+  ],
+  check("amount", "Please enter an amount greater than 0")
+    .isFloat({ min: 1 })
+    .bail(),
+  AppController.incomeList
 );
 
 router.post("/getltgs", AppController.getLtgs);
@@ -70,6 +100,12 @@ router.post("/getgrat", AppController.getGrat);
 router.post("/deletegrat", AppController.deleteGrat);
 
 router.post("/getvisual", AppController.getVisual);
+
+router.post("/getbud", AppController.getBud);
+router.post("/deletebud", AppController.deleteBud);
+
+router.post("/getinc", AppController.getInc);
+router.post("/deleteinc", AppController.deleteInc);
 
 // // Protected Routes
 // router.post(
