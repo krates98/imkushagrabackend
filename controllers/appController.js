@@ -28,6 +28,7 @@ class AppController {
       imageurl: imageUrl,
       date: date,
       userid: decoded.userID,
+      completed: false,
     });
 
     await doc.save();
